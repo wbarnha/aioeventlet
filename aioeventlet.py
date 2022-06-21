@@ -165,7 +165,10 @@ class _Selector(asyncio.selectors._BaseSelectorImpl):
         self._notified = {}
         ready = []
         for fd, events in notified.items():
-            key = self.get_key(fd)
+            try:
+                key = self.get_key(fd)
+            except KeyError:
+                continue
             ready.append((key, events & key.events))
         return ready
 
