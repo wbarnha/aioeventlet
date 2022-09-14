@@ -165,7 +165,10 @@ class _Selector(asyncio.selectors._BaseSelectorImpl):
         self._notified = {}
         ready = []
         for fd, events in notified.items():
-            key = self.get_key(fd)
+            try:
+                key = self.get_key(fd)
+            except KeyError:
+                continue
             ready.append((key, events & key.events))
         return ready
 
@@ -211,6 +214,12 @@ class EventLoop(asyncio.SelectorEventLoop):
 
         if eventlet.patcher.is_monkey_patched('thread'):
             self._default_executor = _TpoolExecutor(self)
+
+    def stop(self):
+        super(EventLoop, self).stop()
+        # selector.select() is running: write into the self-pipe to wake up
+        # the selector
+        self._write_to_self()
 
     def call_soon(self, callback, *args, **kwargs):
         handle = super(EventLoop, self).call_soon(callback, *args, **kwargs)

@@ -1,8 +1,49 @@
 Usage
 =====
 
+Use aioeventlet with asyncio
+----------------------------
+
+aioeventlet can be used with asyncio, coroutines written with ``yield from ...``.
+To use aioeventlet with asyncio, set the event loop policy before using an event
+loop. Example::
+
+    import aioeventlet
+    import asyncio
+
+    asyncio.set_event_loop_policy(aioeventlet.EventLoopPolicy())
+    # ....
+
+Setting the event loop policy should be enough to examples of the asyncio
+documentation with the aioeventlet event loop.
+
+Hello World::
+
+    import aioeventlet
+    import asyncio
+
+    def hello_world():
+        print("Hello World")
+        loop.stop()
+
+    asyncio.set_event_loop_policy(aioeventlet.EventLoopPolicy())
+    loop = asyncio.get_event_loop()
+    loop.call_soon(hello_world)
+    loop.run_forever()
+    loop.close()
+
+.. seealso::
+   The `asyncio documentation
+   <https://docs.python.org/dev/library/asyncio.html>`_.
+
+
 Use aioeventlet with trollius
 -----------------------------
+
+.. warning::
+   The `trollius project is now deprecated
+   <http://trollius.readthedocs.org/deprecated.html>`_. It's now recommended to
+   use aioeventlet with asyncio.
 
 aioeventlet can be used with trollius, coroutines written with ``yield
 From(...)``. Using aioeventlet with trollius is a good start to port project
@@ -34,49 +75,6 @@ Hello World::
 
 .. seealso::
    `Trollius documentation <http://trollius.readthedocs.org/>`_.
-
-
-Use aioeventlet with asyncio
-----------------------------
-
-aioeventlet can be used with asyncio, coroutines written with ``yield from ...``.
-To use aioeventlet with asyncio, set the event loop policy before using an event
-loop. Example::
-
-    import aioeventlet
-    import asyncio
-
-    asyncio.set_event_loop_policy(aioeventlet.EventLoopPolicy())
-    # ....
-
-Setting the event loop policy should be enough to examples of the asyncio
-documentation with the aioeventlet event loop.
-
-.. warning::
-   Since aioeventlet relies on eventlet, eventlet port to Python 3 is not complete
-   and asyncio requires Python 3.3 or newer: using aioeventlet with asyncio is not
-   recommended yet. *Using aioeventlet with trollius should be preferred right
-   now*.  See the :ref:`status of the eventlet port to Python 3
-   <eventlet-py3>`.
-
-Hello World::
-
-    import aioeventlet
-    import asyncio
-
-    def hello_world():
-        print("Hello World")
-        loop.stop()
-
-    asyncio.set_event_loop_policy(aioeventlet.EventLoopPolicy())
-    loop = asyncio.get_event_loop()
-    loop.call_soon(hello_world)
-    loop.run_forever()
-    loop.close()
-
-.. seealso::
-   The `asyncio documentation
-   <https://docs.python.org/dev/library/asyncio.html>`_.
 
 
 Threads
@@ -122,6 +120,10 @@ API
 ===
 
 aioeventlet specific functions:
+
+.. warning::
+   aioeventlet API is not considered as stable yet.
+
 
 yield_future
 ------------
@@ -282,7 +284,7 @@ Requirements:
     needed)
   * Python 3.3: need Tulip 0.4.1 or newer (``pip install asyncio``),
     but Tulip 3.4.1 or newer is recommended
-  * Python 2.6-3.2: need Trollius 0.3 or newer (``pip install trollius``),
+  * Python 2.7: need Trollius 0.3 or newer (``pip install trollius``),
     but Trollius 1.0 or newer is recommended
 
 Type::
@@ -298,7 +300,7 @@ Run tests with tox
 
 The `tox project <http://testrun.org/tox/latest/>`_ can be used to build a
 virtual environment with all runtime and test dependencies and run tests
-against different Python versions (2.6, 2.7, 3.2, 3.3, 3.4).
+against different Python versions (2.7, 3.3, 3.4, 3.5).
 
 To test all Python versions, just type::
 
@@ -310,17 +312,16 @@ To run tests with Python 2.7, type::
 
 To run tests against other Python versions:
 
-* ``py26``: Python 2.6
 * ``py27``: Python 2.7
 * ``py27_patch``: Python 2.7 with eventlet monkey patching
 * ``py27_old``: Python 2.7 with the oldest supported versions of eventlet and
   trollius
-* ``py32``: Python 3.2
 * ``py33``: Python 3.3
 * ``py3_patch``: Python 3 with eventlet monkey patching
 * ``py3_old``: Python 3 with the oldest supported versions of eventlet and
   tulip
 * ``py34``: Python 3.4
+* ``py35``: Python 3.5
 
 Run tests manually
 ------------------

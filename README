@@ -1,3 +1,7 @@
+This is a fork of [aioeventlet](https://github.com/openstack-archive/deb-python-aioeventlet)
+that contains some patches for more recent versions of Python used in the Magma
+project. It is not maintained except for ensuring compatibility with Magma.
+
 aioeventlet implements the asyncio API (PEP 3156) on top of eventlet. It makes
 possible to write asyncio code in a project currently written for eventlet.
 
