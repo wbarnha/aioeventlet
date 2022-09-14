@@ -1,7 +1,23 @@
 Changelog
 =========
 
-* aioeventlet API is now considered as stable
+2016-02-22: Version 0.5.1
+-------------------------
+
+* Fix EventLoop.stop() for the new semantics of stop() introduced
+  in Python 3.4.4 and Python 3.5.1. The method now writes into the self-pipe
+  to wake-up the event loop. Otherwise, the stop() may not be taken in account
+  immediatly, and even block forever.
+
+2016-02-22: Version 0.5
+-----------------------
+
+* Unit tests now use the aiotest library.
+* Fix for eventlet used with monkey-patching: inject the original threading
+  module and the original threading.get_ident() function in
+  asyncio.base_events.
+* Drop support for Python 2.6 and Python 3.2. aioeventlet depends on trollius
+  and pip which don't support these Python versions anymore.
 
 2014-12-03: Version 0.4
 -----------------------

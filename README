@@ -1,3 +1,7 @@
+This is a fork of [aioeventlet](https://github.com/magma/deb-python-aioeventlet)
+that contains some patches for more recent versions of Python used in the Magma
+project. It is not maintained except for ensuring compatibility with Magma.
+
 aioeventlet implements the asyncio API (PEP 3156) on top of eventlet. It makes
 possible to write asyncio code in a project currently written for eventlet.
 
@@ -11,7 +15,7 @@ in a greenthread with aioeventlet. It means that aioeventlet event loop can run
 in an greenthread while the Python main thread runs other greenthreads in
 parallel.
 
-* `aioeventlet documentation <http://aioeventlet.readthedocs.org/>`_
+* `faust-aioeventlet documentation <https://wbarnha.github.io/aioeventlet/index.html>`_
 * `aioeventlet project in the Python Cheeseshop (PyPI)
   <https://pypi.python.org/pypi/aioeventlet>`_
 * `aioeventlet project at Bitbucket <https://bitbucket.org/haypo/aioeventlet>`_

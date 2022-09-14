@@ -10,6 +10,12 @@ logger = logging.getLogger('aioeventlet')
 
 try:
     import asyncio
+    try:
+        import selectors
+    except ImportError:
+        pass
+    else:
+        asyncio.selectors = selectors
 
     if sys.platform == 'win32':
         from asyncio.windows_utils import socketpair
@@ -159,7 +165,10 @@ class _Selector(asyncio.selectors._BaseSelectorImpl):
         self._notified = {}
         ready = []
         for fd, events in notified.items():
-            key = self.get_key(fd)
+            try:
+                key = self.get_key(fd)
+            except KeyError:
+                continue
             ready.append((key, events & key.events))
         return ready
 
@@ -206,16 +215,22 @@ class EventLoop(asyncio.SelectorEventLoop):
         if eventlet.patcher.is_monkey_patched('thread'):
             self._default_executor = _TpoolExecutor(self)
 
-    def call_soon(self, callback, *args):
-        handle = super(EventLoop, self).call_soon(callback, *args)
+    def stop(self):
+        super(EventLoop, self).stop()
+        # selector.select() is running: write into the self-pipe to wake up
+        # the selector
+        self._write_to_self()
+
+    def call_soon(self, callback, *args, **kwargs):
+        handle = super(EventLoop, self).call_soon(callback, *args, **kwargs)
         if self._selector is not None and self._selector._event:
             # selector.select() is running: write into the self-pipe to wake up
             # the selector
             self._write_to_self()
         return handle
 
-    def call_at(self, when, callback, *args):
-        handle = super(EventLoop, self).call_at(when, callback, *args)
+    def call_at(self, when, callback, *args, **kwargs):
+        handle = super(EventLoop, self).call_at(when, callback, *args, **kwargs)
         if self._selector is not None and self._selector._event:
             # selector.select() is running: write into the self-pipe to wake up
             # the selector
@@ -323,7 +338,11 @@ def yield_future(future, loop=None):
     The function must not be called from the greenthread
     running the aioeventlet event loop.
     """
-    future = asyncio.async(future, loop=loop)
+    if hasattr(asyncio, "ensure_future"):
+        ensure_future = asyncio.ensure_future
+    else:  # use of async keyword has been Deprecated since Python 3.4.4
+        ensure_future =  getattr(asyncio, "async")
+    future = ensure_future(future, loop=loop)
     if future._loop._greenthread == eventlet.getcurrent():
         raise RuntimeError("yield_future() must not be called from "
                            "the greenthread of the aioeventlet event loop")
