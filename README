@@ -1,4 +1,4 @@
-This is a fork of [aioeventlet](https://github.com/openstack-archive/deb-python-aioeventlet)
+This is a fork of [aioeventlet](https://github.com/StepicOrg/deb-python-aioeventlet)
 that contains some patches for more recent versions of Python used in the Magma
 project. It is not maintained except for ensuring compatibility with Magma.
 
