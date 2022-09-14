@@ -15,7 +15,7 @@ in a greenthread with aioeventlet. It means that aioeventlet event loop can run
 in an greenthread while the Python main thread runs other greenthreads in
 parallel.
 
-* `aioeventlet documentation <http://aioeventlet.readthedocs.org/>`_
+* `faust-aioeventlet documentation <https://wbarnha.github.io/aioeventlet/index.html>`_
 * `aioeventlet project in the Python Cheeseshop (PyPI)
   <https://pypi.python.org/pypi/aioeventlet>`_
 * `aioeventlet project at Bitbucket <https://bitbucket.org/haypo/aioeventlet>`_
