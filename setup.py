@@ -42,7 +42,7 @@ with open("README") as fp:
     long_description = fp.read()
 
 install_options = {
-    "name": "aioeventlet",
+    "name": "faust-aioeventlet",
     "version": "0.6",
     "license": "Apache License 2.0",
     "author": 'Victor Stinner',
