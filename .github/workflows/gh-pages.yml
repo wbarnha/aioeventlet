@@ -15,7 +15,7 @@ jobs:
       with:
         fetch-depth: 0 # otherwise, you will failed to push refs to dest repo
     - name: "Install deps and build with Sphinx"
-      run: >
+      run: |
         pip3 install -r ./doc/docs.txt
         cd doc
         make html
